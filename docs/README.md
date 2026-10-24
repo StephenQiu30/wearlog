@@ -19,13 +19,19 @@ docs/
 
 | 目录 | 内容 | 模板 |
 | --- | --- | --- |
-| [requirement](requirement/README.md) | 用户故事、目标、范围、功能与非功能需求 | [需求](templates/requirement.md) |
-| [design](design/README.md) | 流程、架构、目录分层、代码落点与取舍 | [设计](templates/design.md) |
-| [prd](prd/README.md) | 本增量业务规则与验收条件 | [产品规格](templates/prd.md) |
-| [plan](plan/README.md) | SDD 任务、依赖、写入范围与验证方法 | [计划](templates/plan.md) |
-| [research](research/README.md) | 有来源的分析结论、建议与局限 | [研究](templates/research.md) |
+| [requirement](requirement/README.md) | 用户故事、目标、范围、功能与非功能需求 | [需求](templates/01-需求模板.md) |
+| [design](design/README.md) | 流程、架构、目录分层、代码落点与取舍 | [设计](templates/02-设计模板.md) |
+| [prd](prd/README.md) | 本增量业务规则与验收条件 | [产品规格](templates/03-产品规格模板.md) |
+| [plan](plan/README.md) | SDD 任务、依赖、写入范围与验证方法 | [计划](templates/04-执行计划模板.md) |
+| [research](research/README.md) | 有来源的分析结论、建议与局限 | [研究](templates/05-调研分析模板.md) |
 
 当前尚无产品主题。新增后在本页列出主题与各阶段链接，无需单独维护 INDEX。
+
+## 文档编号
+
+正式文档使用 `01-主题.md`、`02-主题.md`，按主题建立顺序递增。同一主题在 requirement → design → prd → plan 中使用相同序号，例如 `requirement/01-衣物录入.md` 对应 `design/01-衣物录入.md`；research 独立编号。
+
+编号由协调者核对后分配，不重复、不因删减重排，各目录 README 按编号顺序列出文档。README 与规范文件不加编号，模板按链路顺序采用编号与中文名称；模板序号不替代主题序号。主题文档的 id 使用对应前缀，例如 `REQ-01`、`DES-01`、`PRD-01`、`PLAN-01`、`RES-01`。示例仅说明命名，不代表已录入产品需求。
 
 ## 使用约定
 
