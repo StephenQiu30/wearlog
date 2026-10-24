@@ -4,6 +4,8 @@
 
 ## 2026-10-24
 
+- 按用户要求提交旧 .codex 配置与自定义 MinIO action 的删除，将原固定版本构建步骤内联至 CI，保持现有测试任务。
+
 - 全新搭建 Obsidian 知识库，保留 requirement → design → prd → plan 与 research 目录及各自 README，重复规范集中维护，保留五类模板；敏捷 FR/NFR、SDD 和协作规则归根 AGENTS，工程规范归 PROJECT，任务与接手归 BACKLOG/HANDOVER，运行产物留在库外，旧文档不恢复。
 
 ## 2026-10-13
