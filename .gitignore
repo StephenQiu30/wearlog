@@ -45,3 +45,16 @@ coverage.out
 # Private inputs and recordings must remain outside this public repository.
 /assets/
 /frontend/assets/
+
+# Obsidian: share only portable knowledge-base settings.
+/docs/.obsidian/*
+!/docs/.obsidian/app.json
+!/docs/.obsidian/core-plugins.json
+!/docs/.obsidian/templates.json
+/docs/.trash/
+
+# Knowledge base excludes execution artifacts; keep outputs outside docs.
+/docs/validation/
+/docs/reports/
+/docs/test-results/
+/docs/playwright-report/

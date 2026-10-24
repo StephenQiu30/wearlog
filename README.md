@@ -2,11 +2,11 @@
 
 “衣序”OOTD 的 Go 服务端与 Web 仓库，位于 `Wearlog/wearlog-server`；客户端是同级独立 [wearlog-app](../wearlog-app/README.md)。
 
-## 当前产品设计
+## 本地知识库与当前需求
 
-当前先明确产品需求：以人物展示、选衣试穿、前后对比为核心，连接真实衣橱、保存搭配与实穿记录。研究草案、已确认方向及待验证项见 [需求入口](docs/requirement/README.md)，工程规范见 [PROJECT.md](PROJECT.md)。现有二维能力与固定示例试衣间不代表真实照片试穿或连续环绕已完成；证据见 [文档入口](docs/README.md)。
+[docs](docs/README.md) 是 Obsidian 本地知识库，按 `requirement → design → prd → plan` 组织，调研结论归 research。使用方法与主题链接统一在该首页；任务状态和接手信息归根 BACKLOG/HANDOVER，验收证据与运行产物留在库外。
 
-账号、公共后端、社区、同步和三人物六套内容不作个人首版前置。新存储/API 方案尚未迁移；已有工程维护仍按原代码合同与证据认领。
+2026-10-24 按用户要求从新结构开始，不恢复旧文档。目前已建立组织约定和模板，尚未录入新的产品需求。工程规范见 [PROJECT.md](PROJECT.md)，共享视觉标准见 [DESIGN.md](DESIGN.md)。
 
 ## 当前实现
 
@@ -22,8 +22,9 @@ Go + Gin/Huma + GORM/AutoMigrate + PostgreSQL 已实现健康检查、注册/登
 | [DESIGN.md](DESIGN.md)                                                                      | App 与 Web 唯一视觉和交互设计标准；与 `wearlog-app/DESIGN.md` 保持一致 |
 | [backend](backend/README.md)                                                                | Go 运行说明、内嵌 Swagger、schema 和独立测试                        |
 | [frontend](frontend/README.md)                                                              | Next.js App Router Web 基础工程、Umi OpenAPI 与 Axios 请求层        |
-| [BACKLOG.md](BACKLOG.md)                                                                    | 全局任务顺序、依赖、checklist 与验收出口                            |
-| [HANDOVER.md](HANDOVER.md)                                                                  | 当前接手入口与实施规则                                              |
+| [docs/README.md](docs/README.md) | 知识库入口、主题与模板 |
+| [BACKLOG.md](BACKLOG.md) | 任务优先级、依赖、认领与状态 |
+| [HANDOVER.md](HANDOVER.md) | 多 agent 接手快照、工作区基线与下一动作 |
 | [CHANGELOG.md](CHANGELOG.md)                                                                | 按日期记录的简短改动摘要                                            |
 | [docker-compose.yml](docker-compose.yml) / [docker-compose-env.yml](docker-compose-env.yml) | 明确需要隔离环境时使用，非日常默认启动                              |
 | [AGENTS.md](AGENTS.md) / [CONTRIBUTING.md](CONTRIBUTING.md)                                 | 开发和提交规范                                                      |
@@ -32,7 +33,7 @@ Go + Gin/Huma + GORM/AutoMigrate + PostgreSQL 已实现健康检查、注册/登
 
 ## 本地校验
 
-二维衣橱、平铺单件替换和计划/实穿统计的当前实现与实测见 [二维最小交付](docs/validation/25-二维衣橱与搭配最小交付.md)。支持照片上传、补换图、本地抠图和简单裁剪，原文件与透明展示图分别保留，实测及限制见 [本地抠图与裁剪](docs/validation/27-本地抠图与简单裁剪最小交付.md)。
+验收条件与验证方法保留在 PRD/plan，实际运行结果、日志和截图留在库外；根 HANDOVER 记录精简验证摘要和证据位置。以下命令是运行说明，不代表本次已执行或通过。
 
 开始工作前核对服务端固定工具链：
 

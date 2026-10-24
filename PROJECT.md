@@ -1,22 +1,22 @@
 # WEARLOG 项目规范
 
-更新：2026-10-13。适用范围：`wearlog-server/frontend`、`wearlog-server/backend` 及两者共享的产品与接口约束。
+更新：2026-10-24（知识库入口调整；工程基线保留）。适用范围：`wearlog-server/frontend`、`wearlog-server/backend` 及两者共享的产品与接口约束。
 
 本文维护前后端工程边界，视觉与交互遵循根目录 [DESIGN.md](DESIGN.md)。技术版本以锁文件和工具链配置为准；HTTP 以 `backend/internal/adapter/httpapi` 的 Huma operation 和运行时 OpenAPI 为准；数据库以 `backend/internal/adapter/postgres` 的 GORM record 为准。执行细则见 [后端 AGENTS](backend/AGENTS.md) 与 [前端 AGENTS](frontend/AGENTS.md)。
 
 ## 当前产品与实现边界
 
-正式品牌为衣序 / WEARLOG。本地父目录为 `Wearlog`，两个仓库为 `wearlog-server` 和 `wearlog-app`；Web 包为 `wearlog-frontend`，Go module 为 `github.com/StephenQiu30/wearlog-server/backend`，iOS 工程为 `WearlogApp`。不使用中文拼音命名。当前设计以 [WEARLOG Figma](https://www.figma.com/design/fYWIHuNucsMQBNYzXBPuEq/?node-id=5-4) 为准；工程名称与数据身份的边界见 [命名迁移](docs/validation/WEARLOG命名迁移.md)。
+正式品牌为衣序 / WEARLOG。本地父目录为 `Wearlog`，两个仓库为 `wearlog-server` 和 `wearlog-app`；Web 包为 `wearlog-frontend`，Go module 为 `github.com/StephenQiu30/wearlog-server/backend`，iOS 工程为 `WearlogApp`。不使用中文拼音命名。当前设计以 [WEARLOG Figma](https://www.figma.com/design/fYWIHuNucsMQBNYzXBPuEq/?node-id=5-4) 为准。
 
-当前工作先明确需求与验证方案；产品目标为人物展示、选衣试穿、前后对比、真实衣橱与实穿记录。现有二维能力与固定示例是实现基础，不代表真实试穿已交付。建议 P0、独立环绕门槛及待决策项见需求文档；Web 页面按最新版 Figma 与已授权任务维护；真实生成仍按需求门槛验证。需求见 [入口](docs/requirement/README.md)、[功能与交互](docs/requirement/03-功能需求与交互.md)、[验收条件](docs/requirement/06-交付阶段与验收.md)；技术证据见 [人物展示可行性](docs/research/人物展示可行性.md)，落地模块、接口改造及顺序见 [首版技术实现方案](docs/research/首版技术实现方案.md)。
+当前产品需求从 [本地知识库](docs/README.md) 开始。2026-10-24 按用户要求全新搭建 docs，不恢复旧文档；当前尚未录入新的产品主题。下面保留的历史产品与实现描述仅用于工程上下文，不能替代本轮需求确认，也不构成新的实施授权。
 
-文档职责固定：`docs/requirement` 保存产品目标、范围、业务规则和验收；`docs/research` 保存来源、竞品源码和技术候选；`docs/validation` 保存实现、截图、耗时、费用与测试证据。需求改变才更新需求正文，不为每轮操作新增需求分析文件。工程待办与接手状态仍归 BACKLOG/HANDOVER。
+文档链路为 `requirement → design → prd → plan`：分别维护需求目标与范围、主题方案与交互、业务合同与验收、实施步骤与验证安排。调研分析结论归 `docs/research`；验收条件与验证方法保留在规格，实际测试证据和中间产物保留在知识库之外。具体状态、版本和追溯规则见 [协作规范](AGENTS.md)。根目录 DESIGN.md 仍是跨端共享视觉标准，docs/design 不复制该标准。
 
-已有二维衣橱、照片上传/补换图、平铺搭配、日期计划和实穿统计的本地实现状态见 [二维验证](docs/validation/25-二维衣橱与搭配最小交付.md)、[照片上传](docs/validation/26-真实衣物照片上传最小交付.md)、[抠图与裁剪](docs/validation/27-本地抠图与简单裁剪最小交付.md)。这些是已做工作的记录，不是本轮新验收通过或扩展全部模块的指令；完整统计、设备与环境限制按原记录保留。
+根目录 BACKLOG.md 统一维护任务优先级、认领、状态和依赖；HANDOVER.md 保存精简接手快照、验证摘要与库外证据位置。docs/README.md 提供主题入口，plan 只定义执行方案。旧需求、研究与验证文件已不在工作区，不恢复、不当作当前验收依据。
 
 2026-10-13 按当前用户授权，Web 首页已实现新版 Figma 的人物展示、选衣与前后对比核心交互，含本地照片预览和示例草稿。它复用成对设计素材；未接入供应商推理，也不代表最新 27 个画板的全部业务、真实照片试穿或连续环绕已经交付。原二维业务功能继续保留。
 
-现有 Go/Web 工程继续保留，私人账户和访问隔离属于真实内测必需；社区与跨端同步后置；iOS 已同步项目与品牌命名，真实试穿能力尚未移植；不重建既有服务。计划、实穿与可选照片分别表达，未知属性不补成事实，私人媒体不公开。历史人物与生成实验已移出需求目录，仅保留研究/验证证据。
+现有 Go/Web 工程继续保留，私人账户和访问隔离属于真实内测必需；社区与跨端同步后置；iOS 已同步项目与品牌命名，真实试穿能力尚未移植；不重建既有服务。计划、实穿与可选照片分别表达，未知属性不补成事实，私人媒体不公开。历史人物与生成实验不构成本轮需求或验收依据。
 
 不新增商城、广告、订阅计费、私信、直播、任意模型上传或通用工作流平台。技术选型依据后续受控样本的实际结果决定；img2threejs 已因实际质感失败停止；新人物方案只做研究，实施需另行确定。
 
@@ -235,7 +235,7 @@ backend/
 
 ## 8. 实施与验收
 
-顺序固定为：读取 PROJECT/DESIGN 与当前需求 → 最小端到端实现 → 验证 → 记录结果。视觉、API、数据库或状态变化要更新对应事实源，不建立第二套规范副本。
+按 [协作规范](AGENTS.md) 以小增量推进：需求与 FR/NFR → 设计 → PRD/AC → 可追溯任务 → 最小端到端实现 → 验证与反馈。先读根 BACKLOG/HANDOVER 确定任务和写入边界，再核对 PROJECT/DESIGN 与规格。实际结果简述于根 HANDOVER，运行产物留在库外；视觉、API、数据库或业务规则变化更新对应事实源。
 
 ### 前端实现门禁
 
@@ -252,3 +252,13 @@ backend/
 API 需覆盖契约、鉴权/越权、错误响应、幂等/冲突与取消；数据库需真实约束和事务证据；worker 需重投、重试、清理与关闭证据。详细命令和环境以对应 [后端细则](backend/AGENTS.md) 为准。
 
 只改文档时检查交叉链接、规则一致性与 diff，不把未运行的构建、浏览器、远程 CI、生产或设备门禁写成通过。提交/推送按用户明确指令执行。
+
+## 9. 设计规范的选用
+
+主题设计先核对实际框架与锁文件，按本文第 4～7 节和对应目录 AGENTS 指定准确代码/测试位置、职责、依赖方向、契约与数据边界。不重复绘制全项目目录，不因指南示例另建 features/modules、服务或数据层。
+
+- **Go**：沿用 backend/AGENTS 的 application、adapter、bootstrap/platform 分工与依赖规则；具体业务文件和验收位置在主题设计/计划中说明。
+- **React / Next.js**：采用 [Vercel React Best Practices](https://vercel.com/blog/introducing-react-best-practices)，优先处理请求瀑布、客户端包体和 Server/Client 边界，优化以实际瓶颈为依据。保留 TanStack Query 与当前组件体系；请求级用户数据不放进模块级可变状态。按改动读取插件对应规则，API 以已安装 Next.js 文档为准。
+- **Python / FastAPI（实际采用时）**：语言风格采用 [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html)，框架遵循 [FastAPI 多文件组织](https://fastapi.tiangolo.com/tutorial/bigger-applications/)与[异步指南](https://fastapi.tiangolo.com/async/)。设计明确入口/路由、业务、持久化、schema、依赖注入和测试位置；业务不反向依赖 HTTP/ORM，异步路径不直接调用阻塞 I/O。类型、命名、docstring、错误处理和检查工具在实际工程配置中落地。当前后端仍为 Go，不预建 Python 目录。
+
+官方来源核对日期：2026-10-24；实施前核对当前版本。通用指南不能覆盖项目已有边界，技术选型变更需有明确任务依据。

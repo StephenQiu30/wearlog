@@ -2,6 +2,10 @@
 
 按日期倒序记录，每项一句话说明改动。
 
+## 2026-10-24
+
+- 全新搭建 Obsidian 知识库，保留 requirement → design → prd → plan 与 research 目录及各自 README，重复规范集中维护，保留五类模板；敏捷 FR/NFR、SDD 和协作规则归根 AGENTS，工程规范归 PROJECT，任务与接手归 BACKLOG/HANDOVER，运行产物留在库外，旧文档不恢复。
+
 ## 2026-10-13
 
 - 对齐撤回授权集成夹具的数据库时间精度并增加重读核对；隔离 MinIO 与后端 Go 缓存，避免 CI 解压目录冲突。
