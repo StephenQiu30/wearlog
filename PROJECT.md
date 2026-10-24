@@ -8,7 +8,7 @@
 
 正式品牌为衣序 / WEARLOG。本地父目录为 `Wearlog`，两个仓库为 `wearlog-server` 和 `wearlog-app`；Web 包为 `wearlog-frontend`，Go module 为 `github.com/StephenQiu30/wearlog-server/backend`，iOS 工程为 `WearlogApp`。不使用中文拼音命名。当前设计以 [WEARLOG Figma](https://www.figma.com/design/fYWIHuNucsMQBNYzXBPuEq/?node-id=5-4) 为准。
 
-当前产品需求从 [本地知识库](docs/README.md) 开始。2026-10-24 按用户要求全新搭建 docs，不恢复旧文档；当前尚未录入新的产品主题。下面保留的历史产品与实现描述仅用于工程上下文，不能替代本轮需求确认，也不构成新的实施授权。
+当前产品需求从 [本地知识库](docs/README.md) 开始。2026-10-24 按用户要求全新搭建 docs，不恢复旧文档；首个主题为 [人物环绕](docs/requirement/01-人物环绕.md)。用户明确以接近 Woo 的照片质感与拖动效果为设计首要目标，并要求不参考当前代码。本主题不以旧 GLB/Three.js 路线、既有组件或历史“已实现”描述作为设计、复用或验收依据；先验证完整 Look、连续素材与帧浏览。下列工程基线是后续接入需核对的约束，不证明当前实现可靠，也不授权直接复用。具体方案与门槛仍处于 review，本轮仅整理文档。
 
 文档链路为 `requirement → design → prd → plan`：分别维护需求目标与范围、主题方案与交互、业务合同与验收、实施步骤与验证安排。调研分析结论归 `docs/research`；验收条件与验证方法保留在规格，实际测试证据和中间产物保留在知识库之外。具体状态、版本和追溯规则见 [协作规范](AGENTS.md)。根目录 DESIGN.md 仍是跨端共享视觉标准，docs/design 不复制该标准。
 

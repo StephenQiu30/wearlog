@@ -4,6 +4,10 @@
 
 为 [requirement](../requirement/README.md)、[design](../design/README.md) 和 [prd](../prd/README.md) 提供依据，研究建议不自动成为需求。
 
-当前尚未录入主题文档。使用 [调研分析模板](../templates/05-调研分析模板.md)，同一主题通过链接关联。
+## 主题
+
+- [01 人物环绕](01-人物环绕.md)：照片质感与拖动效果优先，不以当前代码为依据。
+
+使用 [调研分析模板](../templates/05-调研分析模板.md)，同一主题通过链接关联。
 
 [知识库首页](../README.md)
