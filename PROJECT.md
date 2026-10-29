@@ -179,7 +179,12 @@ frontend/
 
 ```text
 backend/
-├── main.go                         # 极薄进程入口
+├── cmd/
+│   ├── server/
+│   │   └── main.go                 # 主服务进程入口（API + Worker）
+│   └── openapi/
+│       └── main.go                 # 独立 OpenAPI 3.1 规格导出 CLI 工具
+├── main.go                         # 兼容根入口，委托至 bootstrap.Run
 ├── go.mod / go.sum                # 唯一 Go module
 ├── internal/
 │   ├── bootstrap/                 # 配置、依赖组装、启动/迁移/关闭
@@ -193,19 +198,24 @@ backend/
 │   │   ├── diary/                  # 私人日记/日历
 │   │   ├── community/              # 发布、互动与治理
 │   │   ├── media/                  # 媒体生命周期
-│   │   └── eventworker/            # Outbox、媒体处理/删除编排
+│   │   ├── eventworker/            # Outbox、媒体处理/删除编排
+│   │   ├── generation/             # 穿搭生成
+│   │   ├── syncchange/             # 同步变更
+│   │   ├── dataexport/             # 数据导出
+│   │   └── orbit/                  # Woo 360°/试穿/单品解析用例
 │   ├── adapter/
 │   │   ├── httpapi/                # Gin/Huma、contract/routes/handlers、Swagger
 │   │   ├── postgres/               # GORM records、事务、查询、AutoMigrate
 │   │   ├── objectstore/            # MinIO 适配
-│   │   └── messagequeue/           # Kafka 适配
+│   │   ├── messagequeue/           # Kafka 适配
+│   │   └── orbitproviders/         # Gemini 2.0 / Fal.ai / Fashn.ai 外部模型适配器
 │   └── platform/                  # config/database/httpserver/mail/ratelimit 生命周期
 ├── tests/
-│   ├── services/                  # 本机真实依赖
+│   ├── services/                  # 本机真实依赖/持久层生命周期（含 orbit_test.go）
 │   ├── integration/               # 实际进程 + 隔离依赖
 │   ├── container/                 # 已构建镜像
 │   └── internal/                  # 上述测试共享夹具
-├── architecture_test.go           # 目录、入口、导入方向与 HTTP 文件职责
+├── architecture_test.go           # 目录、cmd入口、导入方向与 HTTP 文件职责
 ├── Dockerfile / .dockerignore
 └── .env.example
 ```
@@ -216,7 +226,7 @@ backend/
 
 - HTTP 层负责认证接入、解析、合同校验和状态映射，不写 SQL；application 编排用例与事务要求；postgres 承担实际事务、约束与记录映射。
 - I/O 传递 `context.Context` 并有超时/取消；资源由创建者有界关闭。错误使用 `errors.Is/As`，日志记录 request_id 和安全业务标识，不输出凭据、Cookie、原图和连接密码。
-- 唯一 `backend/main.go`，用 `APP_ROLE=api|worker|all` 选择已实现角色，不增加空命令、微服务、通用 BaseRepository 或依赖注入框架。
+- 主服务入口 `backend/cmd/server/main.go`（以及兼容根入口 `backend/main.go`），用 `APP_ROLE=api|worker|all` 选择已实现角色，另外提供 `backend/cmd/openapi/main.go` 导出接口规范，不增加空命令、微服务、通用 BaseRepository 或依赖注入框架。
 - PostgreSQL 保存持久业务事实，Redis 维持已批准短期用途。跨表变更有明确事务，唯一/外键/检查约束由真实 PostgreSQL 验证。
 - 开发 schema 由 postgres record 和集中 AutoMigrate 维护，监听前失败即退出；不能因为当前开发阶段允许重建库就自动删除用户数据。进入保留数据的部署阶段前另行固定版本化迁移方案。
 - 异步工作遵循已实现 Outbox、持久消息、发送确认/offset 提交、幂等、重试与清理机制。删除先撤销访问，保留对象清理追踪直到完成，再最终删除关联记录；不要提前级联删除追踪证据。

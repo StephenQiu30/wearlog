@@ -122,13 +122,13 @@ Return a valid JSON object matching this schema:
 		MaxTemp   int      `json:"max_temp"`
 		StyleTags []string `json:"style_tags"`
 		Garments  []struct {
-			Category     string             `json:"category"`
-			Name         string             `json:"name"`
-			Subcategory  string             `json:"subcategory"`
-			BoundingBox  [4]float64         `json:"bounding_box"`
-			ColorPalette []string           `json:"color_palette"`
-			Material     string             `json:"material"`
-			Confidence   float64            `json:"confidence"`
+			Category     string     `json:"category"`
+			Name         string     `json:"name"`
+			Subcategory  string     `json:"subcategory"`
+			BoundingBox  [4]float64 `json:"bounding_box"`
+			ColorPalette []string   `json:"color_palette"`
+			Material     string     `json:"material"`
+			Confidence   float64    `json:"confidence"`
 		} `json:"garments"`
 	}
 

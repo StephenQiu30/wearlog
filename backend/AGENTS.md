@@ -6,17 +6,24 @@
 
 ## 当前工程形态
 
-- 一个 Go module、一个 `main.go` 命令、一个二进制和一个 OCI 镜像；`APP_ROLE=api|worker|all` 选择已实现角色。
-- 不增加没有真实交付程序的命令目录、微服务、依赖注入框架或通用 BaseRepository。
+- 符合 Google Go 开发规范与标准 Go 布局（Standard Go Project Layout）：
+  - `cmd/server/main.go` 为生产/本地主进程入口（`APP_ROLE=api|worker|all` 选择已实现角色）。
+  - `cmd/openapi/main.go` 为独立的 OpenAPI 3.1 规格导出 CLI 工具（支持 `-out` 与 `-format`）。
+  - 根目录保留 `main.go` 作为向后兼容入口委托调用 `bootstrap.Run`。
 - PostgreSQL 由 GORM 访问；当前开发阶段没有历史数据，进程启动时调用 GORM `AutoMigrate` 对齐表结构。
 - Gin 承担 HTTP 运行时，Huma operation 与 Go struct tag 是接口声明源；OpenAPI 在运行时生成，不提交 YAML/JSON 物化文件。
-- Swagger UI 读取同一进程的 `/openapi.json`；Umi 也从该地址生成请求代码。
+- Swagger UI 读取同一进程的 `/openapi.json`；前端 openapi 生成器也可直接通过 `go run ./cmd/openapi -out ...` 离线导出。
 
 ## 目录
 
 ```text
 backend/
-├── main.go                         # 唯一薄入口，不再套 cmd 子目录
+├── cmd/
+│   ├── server/
+│   │   └── main.go                 # 服务主入口（API + Worker）
+│   └── openapi/
+│       └── main.go                 # 独立 OpenAPI 3.1 规格导出 CLI 工具
+├── main.go                         # 兼容根入口，委托至 bootstrap.Run
 ├── go.mod / go.sum                 # 唯一 Go module
 ├── internal/
 │   ├── application/                # 按业务能力拆分；模型、规则、用例和消费端口共属一个 package
@@ -29,25 +36,30 @@ backend/
 │   │   ├── diary/
 │   │   ├── community/
 │   │   ├── media/
-│   │   └── eventworker/
+│   │   ├── eventworker/
+│   │   ├── generation/
+│   │   ├── syncchange/
+│   │   ├── dataexport/
+│   │   └── orbit/                  # Woo 360°/试穿/解析业务能力
 │   ├── adapter/
 │   │   ├── httpapi/                # 按能力 *_contract / *_routes / *_handlers；router/health/errors/openapi 分责
 │   │   ├── postgres/               # GORM record、迁移、查询与事务
 │   │   ├── objectstore/            # MinIO 私有对象适配器
-│   │   └── messagequeue/           # Kafka 持久消息适配器
+│   │   ├── messagequeue/           # Kafka 持久消息适配器
+│   │   └── orbitproviders/         # Gemini 2.0 / Fal.ai / Fashn.ai 外部适配器
 │   ├── bootstrap/                  # 配置、具体依赖组装和进程生命周期
 │   └── platform/
-│       ├── config/                 # 类型化配置
+│       ├── config/                 # 类型化配置（含 Orbit 外部 API 密钥与超时配置）
 │       ├── database/               # PostgreSQL/GORM 连接与探测
 │       ├── httpserver/             # HTTP 生命周期
 │       ├── mail/                   # TLS SMTP 发信适配器
 │       └── ratelimit/              # Redis 认证限流、探测与连接生命周期
-├── tests/                          # 跨包测试；根目录不直接放 Go 文件
-│   ├── services/                   # 本机真实依赖，build tag: services
+├── tests/                          # 独立外部测试体系；根目录不直接放 Go 文件
+│   ├── services/                   # 本机真实依赖/持久层验收，build tag: services
 │   ├── integration/                # 实际进程与隔离容器，build tag: integration
 │   ├── container/                  # 已构建 OCI 镜像，build tag: container
 │   └── internal/                   # 仅供以上测试共享的夹具
-├── architecture_test.go            # 目录、入口、层间依赖与 HTTP 文件职责
+├── architecture_test.go            # 目录、入口、层间依赖与 HTTP 文件职责架构守护测试
 ├── Dockerfile / .dockerignore
 └── .env.example
 ```
@@ -67,17 +79,20 @@ application/<feature> -> 仅明确批准的更基础业务包
 
 | 包                        | 负责                                                                           | 禁止                                                                          |
 | ------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
-| `main.go`                 | 创建 logger 并委托 bootstrap                                                   | 业务规则、数据库和 HTTP 组装                                                  |
+| `cmd/server/main.go`      | 主程序入口，创建 logger 并委托 bootstrap                                       | 业务规则、数据库和 HTTP 组装                                                  |
+| `cmd/openapi/main.go`     | 独立 CLI 工具，导出 OpenAPI 3.1 JSON/YAML 规格                                 | 运行业务服务、直接读写数据库                                                   |
+| `main.go`                 | 根目录兼容入口，委托 bootstrap                                                 | 业务规则、数据库和 HTTP 组装                                                  |
 | `bootstrap`               | 配置、具体依赖组装、启动迁移、信号与关闭                                       | 业务规则、SQL、HTTP DTO                                                       |
 | `application/<feature>`   | 同一业务能力的模型、错误、规则、用例和自己消费的最小端口                       | `gin.Context`、GORM record、SQL、外部 SDK；禁止重新建立全局 domain/model 大包 |
 | `adapter/postgres`        | GORM record、AutoMigrate、参数化查询、事务、领域映射                           | Gin/Huma DTO、HTTP 状态码                                                     |
 | `adapter/httpapi`         | 路由、输入校验、会话 Cookie、错误与状态映射                                    | GORM、业务 SQL、业务事务                                                      |
 | `adapter/objectstore`     | MinIO 私有桶、versioning、签名 PUT、固定版本读写与全版本删除                   | HTTP DTO、业务状态事务                                                        |
 | `adapter/messagequeue`    | Kafka topic、acks=all、成功后同步提交 offset                                   | 业务数据库、媒体正文                                                          |
+| `adapter/orbitproviders`  | Gemini 2.0、Fal.ai SAM2/BiRefNet、Fashn.ai 穿搭图像与 360 度精灵图外部能力调用 | HTTP DTO、业务数据库、非外部 API 协议逻辑                                     |
 | `application/eventworker` | Outbox relay、JPEG 有界检查/重编码、衣橱 PNG/WebP 与透明展示图、删除与清扫编排 | Gin/Huma、GORM、具体 SDK                                                      |
 | `platform`                | 数据库和 HTTP 等技术资源的连接与生命周期                                       | 用户权限和业务状态规则                                                        |
 
-根 `architecture_test.go` 检查单 module、唯一根入口与源码位置，阻止核心包反向依赖、跨 adapter 直接导入和生产导入测试包，校验业务白名单及测试 suite 布局。`main.go` 只允许 log/slog、os 和 bootstrap；HTTP routes 不容纳 DTO/receiver 方法，contract 不容纳 Handler、消费方接口或非 schema 函数。新增依赖方向前先核对工程规范并更新测试，不用全局 service locator 绕过组装。
+根 `architecture_test.go` 检查单 module、`cmd/` 入口、层间依赖与源码位置，阻止核心包反向依赖、跨 adapter 直接导入和生产导入测试包，校验业务白名单及测试 suite 布局。`cmd/server/main.go` 与 `main.go` 只允许 log/slog、os 和 bootstrap；`cmd/openapi/main.go` 仅允许标准库与 httpapi 导出函数；HTTP routes 不容纳 DTO/receiver 方法，contract 不容纳 Handler、消费方接口或非 schema 函数。新增依赖方向前先核对工程规范并更新测试，不用全局 service locator 绕过组装。
 
 ## Gin 与接口契约
 

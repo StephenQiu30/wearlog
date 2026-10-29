@@ -132,19 +132,40 @@ func TestInternalPackageDependencyDirection(t *testing.T) {
 }
 
 func TestCommandEntrypointIsThin(t *testing.T) {
-	command := "main.go"
-	file, err := parser.ParseFile(token.NewFileSet(), command, nil, parser.ImportsOnly)
-	if err != nil {
-		t.Fatal(err)
+	commands := map[string]map[string]bool{
+		"main.go": {
+			"log/slog":                         true,
+			"os":                               true,
+			internalImportPrefix + "bootstrap": true,
+		},
+		"cmd/server/main.go": {
+			"log/slog":                         true,
+			"os":                               true,
+			internalImportPrefix + "bootstrap": true,
+		},
+		"cmd/openapi/main.go": {
+			"context":                                true,
+			"flag":                                   true,
+			"fmt":                                    true,
+			"os":                                     true,
+			"path/filepath":                          true,
+			internalImportPrefix + "adapter/httpapi": true,
+		},
 	}
-	allowed := map[string]bool{"log/slog": true, "os": true, internalImportPrefix + "bootstrap": true}
-	for _, spec := range file.Imports {
-		importPath, err := strconv.Unquote(spec.Path.Value)
+
+	for command, allowed := range commands {
+		file, err := parser.ParseFile(token.NewFileSet(), command, nil, parser.ImportsOnly)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatalf("parse %s: %v", command, err)
 		}
-		if !allowed[importPath] {
-			t.Errorf("%s only creates the logger and delegates to bootstrap, imported %s", command, importPath)
+		for _, spec := range file.Imports {
+			importPath, err := strconv.Unquote(spec.Path.Value)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !allowed[importPath] {
+				t.Errorf("%s entrypoint imported unapproved package %s", command, importPath)
+			}
 		}
 	}
 }
@@ -293,15 +314,27 @@ func TestProductionDirectoryLayout(t *testing.T) {
 			return nil
 		}
 		parts := strings.Split(filepath.ToSlash(path), "/")
-		if len(parts) < 2 || (parts[0] != "internal" && parts[0] != "tests") {
-			t.Errorf("%s: production code belongs in internal; main.go is the only root entry", path)
+		if len(parts) < 2 {
+			t.Errorf("%s: unexpected root source file; root only allows main.go", path)
+			return nil
+		}
+		topDir := parts[0]
+		if topDir != "internal" && topDir != "tests" && topDir != "cmd" {
+			t.Errorf("%s: code belongs in cmd, internal, or tests; unrecognized top directory %q", path, topDir)
+			return nil
 		}
 		file, err := parser.ParseFile(token.NewFileSet(), path, nil, parser.PackageClauseOnly)
 		if err != nil {
 			return err
 		}
-		if file.Name.Name == "main" {
-			t.Errorf("%s: main.go is the only executable package", path)
+		if topDir == "cmd" {
+			if file.Name.Name != "main" {
+				t.Errorf("%s: cmd entrypoints must be package main, got package %s", path, file.Name.Name)
+			}
+		} else if topDir == "internal" {
+			if file.Name.Name == "main" {
+				t.Errorf("%s: internal packages must not be package main", path)
+			}
 		}
 		return nil
 	})

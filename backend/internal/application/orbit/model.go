@@ -46,15 +46,15 @@ type BoundingBox [4]float64
 
 // GarmentItem represents an individual segmented item in the digital wardrobe dock.
 type GarmentItem struct {
-	ID           string          `json:"id"`
-	Category     GarmentCategory `json:"category"`
-	Name         string          `json:"name"`
-	Subcategory  string          `json:"subcategory"`
-	MattingPNGURL string         `json:"matting_png_url"`
-	BoundingBox  BoundingBox     `json:"bounding_box"`
-	ColorPalette []string        `json:"color_palette"`
-	Material     string          `json:"material"`
-	Confidence   float64         `json:"confidence"`
+	ID            string          `json:"id"`
+	Category      GarmentCategory `json:"category"`
+	Name          string          `json:"name"`
+	Subcategory   string          `json:"subcategory"`
+	MattingPNGURL string          `json:"matting_png_url"`
+	BoundingBox   BoundingBox     `json:"bounding_box"`
+	ColorPalette  []string        `json:"color_palette"`
+	Material      string          `json:"material"`
+	Confidence    float64         `json:"confidence"`
 }
 
 // SpriteSheetResource points to the 16-frame 4x4 WebP atlas used by the Canvas 2D scrubber.
@@ -86,22 +86,22 @@ type Look struct {
 
 // AnalysisResult holds the structured perception output before matting and persistence.
 type AnalysisResult struct {
-	Season      Season
-	MinTemp     int
-	MaxTemp     int
-	StyleTags   []string
+	Season         Season
+	MinTemp        int
+	MaxTemp        int
+	StyleTags      []string
 	GarmentPrompts []GarmentCandidate
 }
 
 // GarmentCandidate holds initial LLM detection before SAM 2 / BiRefNet alpha segmentation.
 type GarmentCandidate struct {
-	Category    GarmentCategory
-	Name        string
-	Subcategory string
-	BoundingBox BoundingBox
+	Category     GarmentCategory
+	Name         string
+	Subcategory  string
+	BoundingBox  BoundingBox
 	ColorPalette []string
-	Material    string
-	Confidence  float64
+	Material     string
+	Confidence   float64
 }
 
 // TryOnResult holds the 2D native-pose virtual try-on render output.
