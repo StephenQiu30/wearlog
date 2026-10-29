@@ -1,17 +1,16 @@
 # WEARLOG Handover
 
-更新：2026-10-24。原地维护当前快照；任务状态见 [BACKLOG](BACKLOG.md)，文档入口见 [docs](docs/README.md)。
+更新：2026-10-29。原地维护当前快照；任务状态见 [BACKLOG](BACKLOG.md)，文档入口见 [docs](docs/README.md)。
 
 ## 当前接手
 
 - 协调者 / 集成人：本聊天主 agent；没有已分派的产品实现任务。
-- 核对时仓库为 `wearlog-server`，分支 `main`、HEAD `80b4ab2`；接手先重新核对 Git 状态与基线。知识库重建已随 `e5a385b` 推送；按用户补充要求，`.codex` 与旧 GitHub action 的删除也纳入本次后续提交，MinIO 构建步骤内联到原 CI 任务，保留测试流程。
-- 本轮仅整理文档：docs 保留 requirement → design → prd → plan 及 research 五个目录及各自 README；职责和导航留在 README，详细规范集中维护，五份短模板保留；协作规则归根 AGENTS，工程规范归 PROJECT。未修改产品代码或启动服务；用户已授权将本次文档整理提交到 main 并推送，提交与 CI 结果以 Git 和 Actions 为准。
-- 验证：81 个本地链接（含锚点）、五份模板、Obsidian JSON、diff 与改动范围检查通过；未运行产品测试或远端 CI。
-- 最新产品主题：[01 人物环绕](docs/README.md)，REQ/DES/PRD/PLAN/RES 均为 revision 1、review。用户于 2026-10-24 确认照片质感与拖动效果优先，并明确不参考当前代码；不从旧 GLB、组件或测试推导当前能力。
-- 本主题仅整理长期方案与规格，未读取产品实现来设计方案，未修改产品代码、生成新素材或启动服务；用户已明确授权将本主题文档提交到 main 并推送，提交与 CI 结果以 Git 和 Actions 为准。并行的编号/模板整理保留。
-- 本主题文档检查：93 个本地链接无缺失，五份主题的 id/status/revision/updated 与导航一致，13 条 FR/NFR 均进入 11 条 AC，计划含 6 项后续任务；正文无本机绝对路径或运行截图。已核对文档差异与空白格式，未运行产品测试；这些检查不代表素材、供应商或设备验收通过。
-- 下一动作：按 PLAN-01 / T-01 收敛平台/设备、基准素材、供应商、预算及测量协议；先验一套满意 Look 与连续环绕，再确定播放器和接入路径。开发前需对齐目标平台中与本主题冲突的旧三维目标说明。
+- 核对时仓库为 `wearlog-server`，分支 `main`；接手先重新核对 Git 状态与基线。
+- 本轮文档升级：针对 Woo 真实技术栈求证与评论区反馈，完成 [01 人物环绕](docs/README.md) 全套规格（REQ/DES/PRD/PLAN/RES-01）向 **revision 2** 升级。
+  - 核心纠偏：剔除 MP4 Seek 与复杂 3D 建模过度设计；
+  - 确立技术主线：2.5D 深度视差微动（Depth-Anything-V2，300ms 消除黑盒等待）+ 单品解构与季节打标（SAM 2 + Gemini 2.0 Flash）+ 2D 原生姿态换装（CatVTON，1.5s 快道）+ 16 正交关键帧 WebP Sprite Sheet（Canvas 2D 60fps 闭环无缝 360° 慢道）。
+- 验证：本地链接无缺失，id/status/revision/updated 保持一致，计划与 AC 闭环对齐。
+- 下一动作：执行 T-01 准备 1 套高质量基准全身照与 3 套代表性衣物样本，启动 T-02 原型验证。
 
 ## 有开发任务时补充
 
