@@ -41,6 +41,7 @@ var allowedApplicationImports = map[string]map[string]bool{
 	"dataexport":     {"account": true},
 	"generation":     {"account": true},
 	"syncchange":     {"account": true},
+	"orbit":          {"account": true},
 }
 
 var forbiddenFrameworkImports = map[string][]string{

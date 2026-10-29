@@ -39,6 +39,15 @@ type GenerationConfig struct {
 	Retention             time.Duration
 }
 
+// OrbitConfig configures the cloud AI providers and runtime budgets for the
+// Woo-style 360° outfit presentation and digital wardrobe extraction.
+type OrbitConfig struct {
+	GeminiAPIKey string
+	FalKey       string
+	FashnAPIKey  string
+	Timeout      time.Duration
+}
+
 type Config struct {
 	Role                    string
 	HTTPAddr                string
@@ -60,6 +69,7 @@ type Config struct {
 	KafkaBrokers            []string
 	KafkaTopicPrefix        string
 	Generation              GenerationConfig
+	Orbit                   OrbitConfig
 	MaxOpenConns            int
 	MaxIdleConns            int
 	ConnMaxLifetime         time.Duration
@@ -96,6 +106,11 @@ func Load(lookup func(string) (string, bool)) (Config, error) {
 		return Config{}, err
 	}
 	c.Generation = generation
+	orbit, err := loadOrbitConfig(get)
+	if err != nil {
+		return Config{}, err
+	}
+	c.Orbit = orbit
 	if c.Role != "api" && c.Role != "worker" && c.Role != "all" {
 		return Config{}, fmt.Errorf("APP_ROLE: expected api, worker or all")
 	}
@@ -314,6 +329,22 @@ func validateGenerationConfig(configuration GenerationConfig) error {
 		return fmt.Errorf("GENERATION_*: remote mode requires bounded currency, budget, quota, attempts, timeout and retention")
 	}
 	return nil
+}
+
+func loadOrbitConfig(get func(string, string) string) (OrbitConfig, error) {
+	orbitTimeout, err := parseOptionalDuration("ORBIT_TIMEOUT", get("ORBIT_TIMEOUT", "25s"))
+	if err != nil {
+		return OrbitConfig{}, err
+	}
+	if orbitTimeout < 5*time.Second || orbitTimeout > 60*time.Second {
+		return OrbitConfig{}, fmt.Errorf("ORBIT_TIMEOUT: expected duration between 5s and 60s")
+	}
+	return OrbitConfig{
+		GeminiAPIKey: get("ORBIT_GEMINI_API_KEY", ""),
+		FalKey:       get("ORBIT_FAL_KEY", ""),
+		FashnAPIKey:  get("ORBIT_FASHN_API_KEY", ""),
+		Timeout:      orbitTimeout,
+	}, nil
 }
 
 func parseGenerationMode(value string) (GenerationMode, error) {

@@ -63,6 +63,7 @@ func Migrate(ctx context.Context, database *gorm.DB) error {
 			&dataExportRecord{},
 			&generationJobRecord{},
 			&generationQuotaReservationRecord{},
+			&orbitLookRecord{},
 			&generationOutputRecord{},
 			&generationCleanupRequestRecord{},
 			&generationSubmissionReconciliationRecord{},

@@ -315,3 +315,36 @@ func TestKafkaConfigurationBoundaries(t *testing.T) {
 		})
 	}
 }
+
+func TestOrbitConfigurationBoundaries(t *testing.T) {
+	for _, test := range []struct {
+		name    string
+		timeout string
+		valid   bool
+	}{
+		{"default valid", "25s", true},
+		{"minimum valid", "5s", true},
+		{"maximum valid", "60s", true},
+		{"too short", "4s", false},
+		{"too long", "61s", false},
+		{"invalid format", "invalid", false},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := loadOrbitConfig(func(key, fallback string) string {
+				if key == "ORBIT_TIMEOUT" {
+					return test.timeout
+				}
+				if key == "ORBIT_GEMINI_API_KEY" {
+					return "synthetic-secret-gemini-key"
+				}
+				return fallback
+			})
+			if (err == nil) != test.valid {
+				t.Fatalf("valid=%v error=%v", test.valid, err)
+			}
+			if err != nil && strings.Contains(err.Error(), "synthetic-secret-gemini-key") {
+				t.Fatal("orbit configuration error exposes secret key")
+			}
+		})
+	}
+}

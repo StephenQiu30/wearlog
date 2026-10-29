@@ -2,6 +2,7 @@ export const siteLinks = [
   { href: '/', label: '试衣间' },
   { href: '/wardrobe', label: '衣橱' },
   { href: '/looks', label: '搭配' },
+  { href: '/orbit', label: '360°' },
   { href: '/wear', label: '记录' },
 ] as const
 

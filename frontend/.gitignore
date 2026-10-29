@@ -32,3 +32,4 @@ next-env.d.ts
 
 # ONNX runtime assets copied from the pinned npm package before dev/build.
 /public/wardrobe-processing/ort-wasm-*
+openapi.json

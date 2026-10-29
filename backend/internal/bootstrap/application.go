@@ -15,6 +15,7 @@ import (
 	"github.com/StephenQiu30/wearlog-server/backend/internal/adapter/httpapi"
 	"github.com/StephenQiu30/wearlog-server/backend/internal/adapter/messagequeue"
 	"github.com/StephenQiu30/wearlog-server/backend/internal/adapter/objectstore"
+	"github.com/StephenQiu30/wearlog-server/backend/internal/adapter/orbitproviders"
 	"github.com/StephenQiu30/wearlog-server/backend/internal/adapter/postgres"
 	accountapp "github.com/StephenQiu30/wearlog-server/backend/internal/application/account"
 	communityapp "github.com/StephenQiu30/wearlog-server/backend/internal/application/community"
@@ -23,6 +24,7 @@ import (
 	eventworkerapp "github.com/StephenQiu30/wearlog-server/backend/internal/application/eventworker"
 	generationapp "github.com/StephenQiu30/wearlog-server/backend/internal/application/generation"
 	mediaapp "github.com/StephenQiu30/wearlog-server/backend/internal/application/media"
+	orbitapp "github.com/StephenQiu30/wearlog-server/backend/internal/application/orbit"
 	feedbackapp "github.com/StephenQiu30/wearlog-server/backend/internal/application/outfitfeedback"
 	outfitplanapp "github.com/StephenQiu30/wearlog-server/backend/internal/application/outfitplan"
 	privacyapp "github.com/StephenQiu30/wearlog-server/backend/internal/application/privacy"
@@ -260,7 +262,18 @@ func runAPI(ctx, startup context.Context, cfg config.Config, pool *database.Pool
 	if objects != nil {
 		accountHandler.WithAvatarObjects(objects)
 	}
-	router, err := httpapi.NewRouterWithGeneration(
+	orbitAnalyzer := orbitproviders.NewGeminiAnalyzer(cfg.Orbit.GeminiAPIKey, nil)
+	orbitMatting := orbitproviders.NewFalMatting(cfg.Orbit.FalKey, nil)
+	orbitTryOn := orbitproviders.NewFashnTryOn(cfg.Orbit.FashnAPIKey, nil)
+	orbitGen := orbitproviders.NewWanOrbitGenerator(cfg.Orbit.FalKey, nil)
+	orbitRepo := postgres.NewOrbitRepository(pool.ORM())
+	orbitService, err := orbitapp.NewService(accounts, orbitAnalyzer, orbitMatting, orbitTryOn, orbitGen, orbitRepo)
+	if err != nil {
+		return err
+	}
+	orbitHandler := httpapi.NewOrbitHandler(orbitService, cfg.SessionSecure)
+
+	router, err := httpapi.NewRouterWithOrbit(
 		startup, cfg.DocsEnabled, probes,
 		accountHandler,
 		httpapi.NewPrivacyHandler(privacy, cfg.SessionSecure),
@@ -269,7 +282,7 @@ func runAPI(ctx, startup context.Context, cfg config.Config, pool *database.Pool
 		httpapi.NewWearEventHandler(wearEvents, cfg.SessionSecure),
 		httpapi.NewDiaryHandler(diaries, cfg.SessionSecure),
 		communityHandler, httpapi.NewFeedbackHandler(feedback, cfg.SessionSecure),
-		exportHandler, httpapi.NewSyncHandler(syncChanges, cfg.SessionSecure), generationHandler, cfg.HealthTimeout, log, mediaHandler,
+		exportHandler, httpapi.NewSyncHandler(syncChanges, cfg.SessionSecure), generationHandler, orbitHandler, cfg.HealthTimeout, log, mediaHandler,
 	)
 	if err != nil {
 		return err

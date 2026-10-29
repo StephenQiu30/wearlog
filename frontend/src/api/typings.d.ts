@@ -82,6 +82,11 @@ declare namespace API {
     updated_at: string
   }
 
+  type AnalyzeOutfitRequest = {
+    /** 全身穿搭照片绝对 URL */
+    photo_url: string
+  }
+
   type AppealPageResponse = {
     appeals: any
     next_after_id?: string
@@ -578,6 +583,41 @@ declare namespace API {
     handle: string
   }
 
+  type GarmentItemDTO = {
+    /** 归一化目标检测边界框 [ymin, xmin, ymax, xmax] */
+    bounding_box: any
+    /** 衣物主类别 */
+    category: 'outerwear' | 'top' | 'bottom' | 'shoes' | 'accessory'
+    /** 提取的主色调 HEX 列表 */
+    color_palette: any
+    /** 识别置信度 */
+    confidence: number
+    /** 单品唯一标识 */
+    id: string
+    /** 材质面料识别标签 */
+    material: string
+    /** 透明抠图 PNG 访问地址 */
+    matting_png_url: string
+    /** 单品描述性名称 */
+    name: string
+    /** 单品具体品类细分 */
+    subcategory: string
+  }
+
+  type Generate360Response = {
+    /** 360 生成耗时 (毫秒) */
+    latency_ms: number
+    /** 关联 Look ID */
+    look_id: string
+    /** 16 帧 WebP 精灵图资源 */
+    sprite_sheet: SpriteSheetDTO
+  }
+
+  type generateOrbit360Params = {
+    /** 目标 Look ID */
+    look_id: string
+  }
+
   type GenerationCleanupResponse = {
     access_revoked_at: string
     attempts: number
@@ -706,6 +746,11 @@ declare namespace API {
 
   type getMediaParams = {
     media_id: string
+  }
+
+  type getOrbitLookParams = {
+    /** 目标 Look ID */
+    look_id: string
   }
 
   type getOutfitPlanParams = {
@@ -929,6 +974,31 @@ declare namespace API {
   type LivenessResponse = {
     request_id: string
     status: 'live'
+  }
+
+  type LookResponse = {
+    /** 创建时间 */
+    created_at: string
+    /** 2.5D 深度图 URL */
+    depth_map_url?: string
+    /** 拆解出的人物穿搭单品列表 */
+    garments: any
+    /** Look 全局唯一标识 */
+    id: string
+    /** 适穿最高温度 (摄氏度) */
+    max_temp: number
+    /** 适穿最低温度 (摄氏度) */
+    min_temp: number
+    /** 全身穿搭原图 URL */
+    original_photo_url: string
+    /** 多模态季节识别标签 */
+    season: 'spring' | 'summer' | 'autumn' | 'winter' | 'all_season'
+    /** 360° 连续关键帧精灵图 */
+    sprite_sheet?: SpriteSheetDTO
+    /** 风格标签数组 */
+    style_tags: any
+    /** 更新时间 */
+    updated_at: string
   }
 
   type markNotificationReadParams = {
@@ -1314,6 +1384,23 @@ declare namespace API {
     reason_code: string
   }
 
+  type SpriteSheetDTO = {
+    /** 单帧像素高度 */
+    frame_height: number
+    /** 单帧像素宽度 */
+    frame_width: number
+    /** 关键帧总数，默认 16 */
+    frames_count: number
+    /** 网格列数，默认 4 */
+    layout_cols: number
+    /** 网格行数，默认 4 */
+    layout_rows: number
+    /** WebP 精灵图地址 */
+    sheet_url: string
+    /** 体积大小 (KB) */
+    total_size_kb: number
+  }
+
   type SubmissionReconciliationResponse = {
     audit_id: string
     decision: 'accepted' | 'not_accepted'
@@ -1350,6 +1437,29 @@ declare namespace API {
 
   type TransitionOutfitPlanRequest = {
     expected_revision: number
+  }
+
+  type tryOnOrbitLookParams = {
+    /** 目标 Look ID */
+    look_id: string
+  }
+
+  type TryOnRequest = {
+    /** 选定的试穿单品详情 */
+    garments: any
+    /** 试穿单品 ID 列表 */
+    selected_garment_ids: any
+  }
+
+  type TryOnResponse = {
+    /** 换装渲染耗时 (毫秒) */
+    latency_ms: number
+    /** 关联 Look ID */
+    look_id: string
+    /** 保持原生姿态的换装渲染图 */
+    result_image_url: string
+    /** 生效的单品 ID 列表 */
+    selected_garment_ids: any
   }
 
   type unblockUserParams = {

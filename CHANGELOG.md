@@ -4,6 +4,8 @@
 
 ## 2026-10-29
 
+- 落地 01 人物环绕与立体数字衣橱（T-01 ~ T-07）：Go 后端按 Google Go 规范完成 orbit 领域层、适配层、Huma 契约与单元测试；前端按 Vercel 规范基于 openapi2ts 自动生成 orbit API，构建 60fps Canvas 2D WebP SpriteSheet 拖动展台、懒加载 2.5D 视差与数字衣橱单品 Dock，通过全量测试与生产构建。
+
 - 升级 01 人物环绕规格至 revision 4：将 Vercel Next.js 最佳工程实践（RSC/客户端叶子化、CLS=0、onnxruntime-web 懒加载）与 Google Go 代码设计规范（显式错误处理与 wrap、errgroup 并发、统一 Context 治理、领域模型隔离与 Huma Contract DTO 拆分）深度写入 DES-01/PRD-01/PLAN-01；准备落地实施。
 
 - 升级 01 人物环绕规格至 revision 3：落实 1:1 复刻 Woo 的纯 API 架构（Gemini 2.0 Flash + Fal.ai/FASHN.ai + 端侧 onnxruntime-web），明确零自建 GPU 算力约束；固化 Go /backend 暴露 /openapi.json 与 Next.js 前端 openapi2ts 强类型契约。

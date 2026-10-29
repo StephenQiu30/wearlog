@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"os"
 	"regexp"
 	"slices"
 	"testing"
@@ -148,6 +149,10 @@ func TestGeneratedOpenAPIContract(t *testing.T) {
 		"listOwnModerationAppeals":        true,
 		"listModerationAppeals":           true,
 		"resolveModerationAppeal":         true,
+		"analyzeOrbitOutfit":              true,
+		"tryOnOrbitLook":                  true,
+		"generateOrbit360":                true,
+		"getOrbitLook":                    true,
 	}
 	versionedPath := regexp.MustCompile(`^/v[0-9]+(?:/|$)`)
 	for path, item := range spec.Paths {
@@ -197,7 +202,7 @@ func TestGeneratedOpenAPIContract(t *testing.T) {
 			}
 		}
 	}
-	if spec.OpenAPI != "3.1.2" || spec.Info.Version != "0.31.0" || operations != 132 || len(spec.Paths) != 100 {
+	if spec.OpenAPI != "3.1.2" || spec.Info.Version != "0.31.0" || operations != 136 || len(spec.Paths) != 104 {
 		t.Fatalf("unexpected generated contract: openapi=%s api=%s operations=%d paths=%d", spec.OpenAPI, spec.Info.Version, operations, len(spec.Paths))
 	}
 	mediaRequest := spec.Components.Schemas["CreateMediaUploadRequest"]
@@ -224,6 +229,11 @@ func TestGeneratedOpenAPIContract(t *testing.T) {
 	for _, operationID := range []string{"listCommunityFeed", "searchCommunityPosts", "listProfilePosts", "listProfileFollowers", "listProfileFollowing", "likePost", "unlikePost", "bookmarkPost", "unbookmarkPost", "listBookmarks", "followProfile", "unfollowProfile", "blockUser", "unblockUser", "listBlockedUsers", "createComment", "listComments", "listCommentReplies", "deleteComment", "listCommentModerationCandidates", "decideCommentModeration", "removePublishedComment", "listNotifications", "markNotificationRead", "createModerationAppeal", "listOwnModerationAppeals", "listModerationAppeals", "resolveModerationAppeal"} {
 		if !identifiers[operationID] {
 			t.Fatalf("generated contract is missing B4 operation %s", operationID)
+		}
+	}
+	for _, operationID := range []string{"analyzeOrbitOutfit", "tryOnOrbitLook", "generateOrbit360", "getOrbitLook"} {
+		if !identifiers[operationID] {
+			t.Fatalf("generated contract is missing orbit operation %s", operationID)
 		}
 	}
 	if bytes.Contains(jsonDocument, []byte(`"owner_id"`)) {
@@ -277,6 +287,20 @@ func TestGeneratedOpenAPIContract(t *testing.T) {
 	_, confirms := output.Properties["confirmed_at"]
 	if !exists || !confirms || slices.Contains(output.Required, "confirmed_at") {
 		t.Fatal("generated image output contract must expose optional confirmation time")
+	}
+}
+
+func TestExportOpenAPISpec(t *testing.T) {
+	outPath := os.Getenv("EXPORT_OPENAPI_PATH")
+	if outPath == "" {
+		return
+	}
+	_, jsonDocument, err := GeneratedOpenAPI(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(outPath, jsonDocument, 0644); err != nil {
+		t.Fatal(err)
 	}
 }
 

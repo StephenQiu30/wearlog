@@ -15,6 +15,7 @@ import * as dataExport from './dataExport'
 import * as communityDiscovery from './communityDiscovery'
 import * as health from './health'
 import * as notifications from './notifications'
+import * as orbit from './orbit'
 import * as outfitPlans from './outfitPlans'
 import * as communityPosts from './communityPosts'
 import * as publicCommunity from './publicCommunity'
@@ -42,6 +43,7 @@ export default {
   communityDiscovery,
   health,
   notifications,
+  orbit,
   outfitPlans,
   communityPosts,
   publicCommunity,
