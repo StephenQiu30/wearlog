@@ -4,6 +4,8 @@
 
 ## 2026-10-29
 
+- 升级 01 人物环绕规格至 revision 3：落实 1:1 复刻 Woo 的纯 API 架构（Gemini 2.0 Flash + Fal.ai/FASHN.ai + 端侧 onnxruntime-web），明确零自建 GPU 算力约束；固化 Go /backend 暴露 /openapi.json 与 Next.js 前端 openapi2ts 强类型契约。
+
 - 升级 01 人物环绕规格至 revision 2：去除非必要过度设计（剔除 3D Mesh 与 MP4 手势 Seek），确立“2.5D 即时深度视差 + SAM 2 单品解构与季节打标 + 2D 原生姿态换装 + 16 正交关键帧 WebP Sprite Sheet 闭环环绕”的务实工程主线；同步更新 REQ/DES/PRD/PLAN/RES-01 与 BACKLOG/HANDOVER。
 
 ## 2026-10-24

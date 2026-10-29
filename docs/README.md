@@ -29,9 +29,9 @@ docs/
 
 | 主题 | 需求 → 设计 → PRD → 计划 | 调研 | 当前边界 |
 | --- | --- | --- | --- |
-| 01 人物环绕 | [REQ-01](requirement/01-人物环绕.md) → [DES-01](design/01-人物环绕.md) → [PRD-01](prd/01-人物环绕.md) → [PLAN-01](plan/01-人物环绕.md) | [RES-01](research/01-人物环绕.md) | 对标 Woo 体验并深度求证（revision 2）；确立“2.5D 深度即时视差 + SAM 2 单品解构 + 2D 原生姿态试穿 + 16 正交关键帧 WebP Sprite Sheet”的务实工程主线，去除三维建模与 MP4 Seek 等过度设计 |
+| 01 人物环绕 | [REQ-01](requirement/01-人物环绕.md) → [DES-01](design/01-人物环绕.md) → [PRD-01](prd/01-人物环绕.md) → [PLAN-01](plan/01-人物环绕.md) | [RES-01](research/01-人物环绕.md) | 对标 Woo 1:1 复刻（revision 3）；锁定“纯 API 聚合网关 + 端侧 onnxruntime-web 零成本深度视差 + 2D 原生姿态换装 + 16 正交关键帧 WebP Sprite Sheet 闭环”架构，零自建 GPU 算力 |
 
-本主题以 2.5D 即时立体反馈（300ms）消除等待感，以 2D 试穿（CatVTON）保障换装高频低成本，以 16 正交关键帧 WebP Sprite Sheet 保证 360° 拖拽 60fps 闭环无缝。视觉质感、解构归档与帧浏览性能分别验收。
+本主题以前端 Vercel (Next.js) + shadcn + Radix + Tailwind v4 与后端 Go (Gin/Huma) 为工程基线，通过 `/openapi.json` 与 `npm run openapi` 强类型契约打通全链路，实现低延迟、低成本的 360° 立体数字衣橱。
 
 ## 文档编号
 
