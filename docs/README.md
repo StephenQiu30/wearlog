@@ -29,7 +29,7 @@ docs/
 
 | 主题 | 需求 → 设计 → PRD → 计划 | 调研 | 当前边界 |
 | --- | --- | --- | --- |
-| 01 人物环绕 | [REQ-01](requirement/01-人物环绕.md) → [DES-01](design/01-人物环绕.md) → [PRD-01](prd/01-人物环绕.md) → [PLAN-01](plan/01-人物环绕.md) | [RES-01](research/01-人物环绕.md) | 对标 Woo 1:1 复刻（revision 3）；锁定“纯 API 聚合网关 + 端侧 onnxruntime-web 零成本深度视差 + 2D 原生姿态换装 + 16 正交关键帧 WebP Sprite Sheet 闭环”架构，零自建 GPU 算力 |
+| 01 人物环绕 | [REQ-01](requirement/01-人物环绕.md) → [DES-01](design/01-人物环绕.md) → [PRD-01](prd/01-人物环绕.md) → [PLAN-01](plan/01-人物环绕.md) | [RES-01](research/01-人物环绕.md) | 对标 Woo 1:1 复刻（revision 4）；落实纯 API 架构与双工程规范：前端遵循 Vercel 设计与 Next.js App Router 性能标准，后端遵循 Google Go Style Guide，零自建 GPU 算力 |
 
 本主题以前端 Vercel (Next.js) + shadcn + Radix + Tailwind v4 与后端 Go (Gin/Huma) 为工程基线，通过 `/openapi.json` 与 `npm run openapi` 强类型契约打通全链路，实现低延迟、低成本的 360° 立体数字衣橱。
 

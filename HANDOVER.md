@@ -6,8 +6,10 @@
 
 - 协调者 / 集成人：本聊天主 agent；没有已分派的产品实现任务。
 - 核对时仓库为 `wearlog-server`，分支 `main`；接手先重新核对 Git 状态与基线。
-- 本轮文档升级：针对 Woo 1:1 复刻、零自建 GPU 算力约束与明确的前后端技术栈（Next.js + shadcn + Radix + Tailwind v4 + Axios + umiopenapi 与 Go /backend），完成 [01 人物环绕](docs/README.md) 全套规格（REQ/DES/PRD/PLAN/RES-01）向 **revision 3** 升级。
-  - 核心架构锁定：纯 API 聚合网关（/backend Go 封装调用 Gemini 2.0 Flash、Fal.ai、FASHN.ai）+ 端侧 onnxruntime-web 零成本 2.5D 深度视差 + 2D 原生姿态换装 + 16 关键帧 WebP Sprite Sheet 闭环环绕；
+- 本轮文档升级：针对技术选型的完整工程化设计，完成 [01 人物环绕](docs/README.md) 全套规格（REQ/DES/PRD/PLAN/RES-01）向 **revision 4** 升级。
+  - 核心设计固化：
+    - 前端严格遵循 Vercel 设计体系 (Geist) 与 Next.js App Router 性能规范（CLS=0、Server-First、onnxruntime-web 懒加载、Canvas 2D 60fps）；
+    - 后端严格遵循 Google Go Style Guide（面向接口消费、Context-First 带超时、显式小写错误包裹、无包级可变全局状态、errgroup 协程生命周期控制）；
   - 接口契约：Go Huma 导出 `/openapi.json`，前端通过 `npm run openapi` 自动生成全类型 Axios 客户端。
 - 验证：本地链接无缺失，id/status/revision/updated 保持一致，计划与 AC 闭环对齐。
 - 下一动作：执行 T-01/T-02 搭建 `/backend` Orbit 路由，导出 `/openapi.json` 并通过 `npm run openapi` 生成前端 SDK。

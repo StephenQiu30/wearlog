@@ -4,6 +4,8 @@
 
 ## 2026-10-29
 
+- 升级 01 人物环绕规格至 revision 4：将 Vercel Next.js 最佳工程实践（RSC/客户端叶子化、CLS=0、onnxruntime-web 懒加载）与 Google Go 代码设计规范（显式错误处理与 wrap、errgroup 并发、统一 Context 治理、领域模型隔离与 Huma Contract DTO 拆分）深度写入 DES-01/PRD-01/PLAN-01；准备落地实施。
+
 - 升级 01 人物环绕规格至 revision 3：落实 1:1 复刻 Woo 的纯 API 架构（Gemini 2.0 Flash + Fal.ai/FASHN.ai + 端侧 onnxruntime-web），明确零自建 GPU 算力约束；固化 Go /backend 暴露 /openapi.json 与 Next.js 前端 openapi2ts 强类型契约。
 
 - 升级 01 人物环绕规格至 revision 2：去除非必要过度设计（剔除 3D Mesh 与 MP4 手势 Seek），确立“2.5D 即时深度视差 + SAM 2 单品解构与季节打标 + 2D 原生姿态换装 + 16 正交关键帧 WebP Sprite Sheet 闭环环绕”的务实工程主线；同步更新 REQ/DES/PRD/PLAN/RES-01 与 BACKLOG/HANDOVER。
